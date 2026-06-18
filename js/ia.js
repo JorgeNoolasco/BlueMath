@@ -1,9 +1,7 @@
-const API_KEY = "AQ.Ab8RN6IguhKuG5j7R2B1D7RHddz7M0SAjY4W1LY7DcU1nMWxOw"; // Recomendo gerar uma nova chave depois!
-
 async function chamarIA(prompt) {
     try {
         const resposta = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${AQ.Ab8RN6LTwYYCJ39GIAuU4HyQoW6Rc87sqQWLK42sD02xQLBQYA}",
             {
                 method: "POST",
                 headers: {
