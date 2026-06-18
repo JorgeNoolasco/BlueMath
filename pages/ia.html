@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlueMath IA</title>
-    <link rel="stylesheet" href="../css/ia.css">
+    <link rel="stylesheet" href="ia.css">
 </head>
 <body>
 
@@ -14,36 +14,28 @@
     </header>
 
     <main>
-
         <div class="chat-container">
-
             <div id="chat-box">
-
                 <div class="bot-message">
-                    Olá! Sou a BlueMath IA. Posso explicar conteúdos, corrigir exercícios e gerar desafios de matemática.
+                    Olá! Sou a BlueMath IA. Digite uma dúvida de matemática abaixo para eu te explicar de forma simples.
                 </div>
-
+                <div class="bot-message" id="resultado" style="display: none;"></div>
             </div>
 
             <div class="input-area">
-
                 <input
                     type="text"
-                    id="userInput"
+                    id="pergunta"
                     placeholder="Digite sua pergunta..."
                 >
 
-                <button onclick="enviarMensagem()">
-                    Enviar
+                <button onclick="explicar()">
+                    Explicar
                 </button>
-
             </div>
-
         </div>
-
     </main>
 
-    <script src="../js/ia.js"></script>
-
+    <script src="ia.js"></script>
 </body>
 </html>

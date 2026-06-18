@@ -76,12 +76,15 @@ main{
     background:#0f172a;
 }
 
-.input-area input{
-    flex:1;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
+.input-area input {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    background: #334155; /* Um cinza escuro para combinar com o tema */
+    color: white;        /* Texto branco legível */
+    outline: none;       /* Remove aquela borda preta feia ao clicar */
 }
 
 .input-area button{

@@ -1,55 +1,34 @@
-const resposta = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
-    {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            contents: [
-                {
-                    parts: [
+const API_KEY = "AQ.Ab8RN6IguhKuG5j7R2B1D7RHddz7M0SAjY4W1LY7DcU1nMWxOw";
+async function chamarIA(prompt) {
+    try {
+        const resposta = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    contents: [
                         {
-                            text: texto
+                            parts: [
+                                { text: prompt }
+                            ]
                         }
                     ]
-                }
-            ]
-        })
+                })
+            }
+        );
+
+        const dados = await resposta.json();
+        
+        // Retorna o texto da IA para quem chamou a função
+        return dados.candidates[0].content.parts[0].text;
+        
+    } catch (erro) {
+        console.error("Erro ao chamar a API:", erro);
+        return "Ops, deu um erro ao conversar com a IA.";
     }
-);
-
-const dados = await resposta.json();
-
-const respostaIA =
-    dados.candidates[0].content.parts[0].text;
-
-adicionarMensagem(respostaIA, "bot-message");
-const API_KEY = "AQ.Ab8RN6IguhKuG5j7R2B1D7RHddz7M0SAjY4W1LY7DcU1nMWxOw";
-
-async function chamarIA(prompt) {
-    const resposta = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [
-                            { text: prompt }
-                        ]
-                    }
-                ]
-            })
-        }
-    );
-
-    const dados = await resposta.json();
-
-    return dados.candidates[0].content.parts[0].text;
 }
 
 async function explicar() {
