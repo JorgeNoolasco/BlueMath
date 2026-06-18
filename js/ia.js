@@ -1,4 +1,5 @@
-const API_KEY = "AQ.Ab8RN6IguhKuG5j7R2B1D7RHddz7M0SAjY4W1LY7DcU1nMWxOw";
+const API_KEY = "AQ.Ab8RN6IguhKuG5j7R2B1D7RHddz7M0SAjY4W1LY7DcU1nMWxOw"; // Recomendo gerar uma nova chave depois!
+
 async function chamarIA(prompt) {
     try {
         const resposta = await fetch(
@@ -20,31 +21,50 @@ async function chamarIA(prompt) {
             }
         );
 
+        // 1. A validação do erro 429 deve ser feita aqui, logo após o fetch!
+        if (!resposta.ok) {
+            if (resposta.status === 429) {
+                return "Erro 429: Limite de requisições atingido. Aguarde um minuto e tente novamente.";
+            }
+            return `Erro na API: Status ${resposta.status}`;
+        }
+
         const dados = await resposta.json();
-        
-        // Retorna o texto da IA para quem chamou a função
-        return dados.candidates[0].content.parts[0].text;
-        
+
+        // 2. Verifica se a estrutura de dados existe antes de tentar ler o [0]
+        if (dados && dados.candidates && dados.candidates[0] && dados.candidates[0].content.parts[0]) {
+            return dados.candidates[0].content.parts[0].text;
+        } else {
+            console.error("Estrutura de resposta inesperada:", dados);
+            return "Ops, a IA mandou uma resposta em um formato estranho.";
+        }
+
     } catch (erro) {
         console.error("Erro ao chamar a API:", erro);
         return "Ops, deu um erro ao conversar com a IA.";
     }
 }
 
+// Esta é a função que o seu botão do HTML chama
 async function explicar() {
-    const pergunta = document.getElementById("pergunta").value;
+    try {
+        // Exemplo: pegando o texto de algum input (ajuste para o id do seu projeto se precisar)
+        const inputUsuario = document.getElementById("seu-input-id")?.value || "Me explique como funciona o fetch"; 
+        
+        // Chama a função que lida com a API e espera o texto voltar
+        const resultado = await chamarIA(inputUsuario);
+        
+        // Se o resultado começar com "Erro" ou "Ops", você pode tratar com um alert
+        if (resultado.startsWith("Erro") || resultado.startsWith("Ops")) {
+            alert(resultado);
+            return;
+        }
 
-    const resposta = await chamarIA(
-        `Explique de forma simples para um estudante: ${pergunta}`
-    );
+        // Se deu tudo certo, exibe o resultado na tela
+        console.log("Resultado da IA:", resultado);
+        // document.getElementById("seu-elemento-de-texto").innerText = resultado;
 
-    document.getElementById("resultado").innerText = resposta;
-}
-
-async function gerarExercicio() {
-    const resposta = await chamarIA(
-        "Gere um exercício de matemática de nível médio sem mostrar a resposta."
-    );
-
-    document.getElementById("resultado").innerText = resposta;
+    } catch (erro) {
+        console.error("Erro capturado na função explicar:", erro);
+    }
 }
