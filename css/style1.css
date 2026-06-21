@@ -179,3 +179,8 @@ body {
 .card p {
     margin: 0;
 }
+.footer {
+    background: #111827;
+    color: white;
+    padding: 100px 10%;
+}
