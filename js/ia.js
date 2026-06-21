@@ -1,70 +1,313 @@
-const API_KEY = "AQ.Ab8RN6LFg9znrKawI844Sm3T7woMvu3Jsi78C3w0rB7ioQzbTw"; // Sua chave de teste
+/** const API_KEY = "AQ.Ab8RN6LFg9znrKawI844Sm3T7woMvu3Jsi78C3w0rB7ioQzbTw"; // Sua chave de teste
 
-async function chamarIA(prompt) {
-    try {
-        const resposta = await fetch(
-            `"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"?key=${API_KEY}`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
-                })
-            }
-        );
 
-        if (!resposta.ok) {
-            if (resposta.status === 503) {
-                return "O servidor da IA está temporariamente sobrecarregado. Por favor, aguarde alguns segundos e tente novamente.";
-            }
-            if (resposta.status === 429) {
-                return "Limite de requisições atingido. Por favor, aguarde um momento antes de enviar uma nova dúvida.";
-            }
-            return `Desculpe, ocorreu um erro inesperado (Código ${resposta.status}).`;
-        }
-
-        const dados = await resposta.json();
-        return dados?.candidates?.[0]?.content?.parts?.[0]?.text || "A IA retornou uma resposta em formato inválido.";
-
-    } catch (erro) {
-        console.error("Erro de rede:", erro);
-        return "Não foi possível conectar aos nossos servidores. Verifique sua conexão com a internet.";
+ * ============================================================================
+ * BLUEMATH — TUTOR DE IA (SocraticAI)
+ * Arquivo: js/ia.js
+ * Descrição: Implementa o chat inteligente de matemática integrado à API
+ * oficial do Google Gemini, usando requisições HTTP nativas (fetch),
+ * 100% client-side, sem frameworks ou bibliotecas externas.
+ *
+ * IMPORTANTE (segurança):
+ * Este projeto é exclusivamente de testes/desenvolvimento local. Em um
+ * ambiente de produção real, a chave de API NUNCA deve ficar exposta no
+ * código do navegador — o ideal é um backend (proxy) que guarde a chave
+ * em variável de ambiente e repasse as requisições ao Gemini.
+ * ============================================================================
+ */
+ 
+/* --------------------------------------------------------------------------
+   1. CONFIGURAÇÃO DA API
+   -------------------------------------------------------------------------- */
+ 
+// ATENÇÃO: substitua pela sua chave pessoal gerada em https://aistudio.google.com/apikey
+const GEMINI_API_KEY = 'SUA_CHAVE_API_AQUI';
+ 
+// Modelo do Gemini utilizado (rápido e gratuito para uso em testes)
+const GEMINI_MODEL = 'gemini-2.0-flash';
+ 
+// Endpoint oficial da API de geração de conteúdo do Gemini
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+ 
+// Instrução de sistema: define a personalidade do tutor (método socrático)
+const INSTRUCAO_SISTEMA = `Você é o SocraticAI, o tutor de matemática da plataforma BlueMath.
+Sua missão é ajudar o estudante a PENSAR, nunca apenas entregar a resposta pronta.
+Sempre que possível, faça perguntas guiadas, dê dicas passo a passo e só revele a
+solução completa se o aluno pedir explicitamente. Use linguagem clara, encorajadora
+e adequada ao nível do estudante. Quando escrever fórmulas ou cálculos, organize-os
+em linhas separadas para facilitar a leitura. Respostas em português do Brasil.`;
+ 
+/* --------------------------------------------------------------------------
+   2. ESTADO DO CHAT (histórico mantido durante a sessão do usuário)
+   -------------------------------------------------------------------------- */
+let historicoConversa = []; // Lista de { role: 'user' | 'model', parts: [{ text }] }
+let requisicaoEmAndamento = false;
+ 
+/* --------------------------------------------------------------------------
+   3. REFERÊNCIAS DOS ELEMENTOS DA INTERFACE
+   -------------------------------------------------------------------------- */
+let elMensagens, elInput, elFormulario, elBotaoEnviar, elErro, elSugestoes;
+ 
+document.addEventListener('DOMContentLoaded', () => {
+  elMensagens = document.getElementById('chat-messages');
+  elInput = document.getElementById('chat-input');
+  elFormulario = document.getElementById('chat-form');
+  elBotaoEnviar = document.getElementById('chat-send-btn');
+  elErro = document.getElementById('chat-error');
+  elSugestoes = document.querySelectorAll('.suggestion-chip');
+ 
+  if (!elFormulario) return; // Só inicializa o chat na página pages/ia.html
+ 
+  inicializarChat();
+});
+ 
+/**
+ * Liga todos os eventos da interface de chat: envio do formulário, atalho de
+ * teclado (Enter para enviar / Shift+Enter para quebrar linha), chips de
+ * sugestão e auto-resize da caixa de texto.
+ */
+function inicializarChat() {
+  elFormulario.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+    enviarMensagemUsuario(elInput.value);
+  });
+ 
+  elInput.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Enter' && !evento.shiftKey) {
+      evento.preventDefault();
+      enviarMensagemUsuario(elInput.value);
     }
+  });
+ 
+  // Cresce a textarea automaticamente conforme o usuário digita
+  elInput.addEventListener('input', () => {
+    elInput.style.height = 'auto';
+    elInput.style.height = `${Math.min(elInput.scrollHeight, 140)}px`;
+  });
+ 
+  // Chips de sugestão preenchem e enviam a pergunta automaticamente
+  elSugestoes.forEach((chip) => {
+    chip.addEventListener('click', () => enviarMensagemUsuario(chip.textContent.trim()));
+  });
 }
-
-// Esta função agora manipula o HTML dinamicamente
-async function explicar() {
-    const inputPergunta = document.getElementById("pergunta");
-    const chatBox = document.getElementById("chat-box");
-    const textoPergunta = inputPergunta.value.trim();
-
-    // Se o usuário não digitou nada, não faz nada
-    if (!textoPergunta) return;
-
-    // 1. Cria e adiciona o balão de mensagem do Usuário na tela
-    const balaoUsuario = document.createElement("div");
-    balaoUsuario.className = "user-message"; // Lembre de estilizar essa classe no seu CSS (ex: alinhar à direita)
-    balaoUsuario.textContent = textoPergunta;
-    chatBox.appendChild(balaoUsuario);
-
-    // Limpa o campo de texto
-    inputPergunta.value = "";
-
-    // Como você já tem um padrão de CSS, vamos criar o balão do Bot que receberá a resposta
-    const balaoBot = document.createElement("div");
-    balaoBot.className = "bot-message";
-    balaoBot.textContent = "Pensando..."; // Efeito visual de carregamento
-    chatBox.appendChild(balaoBot);
-
-    // Rola o chat para baixo automaticamente para mostrar a nova mensagem
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // 2. Chama a API do Gemini
-    const respostaIA = await chamarIA(textoPergunta);
-
-    // 3. Substitui o "Pensando..." pela resposta real (ou pelo erro amigável)
-    balaoBot.textContent = respostaIA;
-
-    // Rola o chat para baixo novamente após a resposta chegar
-    chatBox.scrollTop = chatBox.scrollHeight;
+ 
+/* --------------------------------------------------------------------------
+   4. ENVIO DE MENSAGENS
+   -------------------------------------------------------------------------- */
+ 
+/**
+ * Processa o envio de uma nova mensagem do usuário: valida o texto, exibe na
+ * tela, atualiza o histórico e dispara a chamada à API do Gemini.
+ */
+async function enviarMensagemUsuario(textoBruto) {
+  const texto = textoBruto.trim();
+  if (!texto || requisicaoEmAndamento) return;
+ 
+  esconderErro();
+  renderizarMensagem('user', texto);
+  historicoConversa.push({ role: 'user', parts: [{ text: texto }] });
+ 
+  elInput.value = '';
+  elInput.style.height = 'auto';
+  alternarEstadoCarregando(true);
+ 
+  const idIndicador = mostrarIndicadorDigitando();
+ 
+  try {
+    const respostaTexto = await consultarGemini(historicoConversa);
+    removerIndicadorDigitando(idIndicador);
+    renderizarMensagem('model', respostaTexto);
+    historicoConversa.push({ role: 'model', parts: [{ text: respostaTexto }] });
+  } catch (erro) {
+    removerIndicadorDigitando(idIndicador);
+    console.error('Erro ao consultar a API do Gemini:', erro);
+    exibirErro(traduzirErro(erro));
+  } finally {
+    alternarEstadoCarregando(false);
+  }
 }
+ 
+/**
+ * Realiza a requisição HTTP (fetch) para a API do Google Gemini, enviando
+ * todo o histórico da conversa para manter o contexto entre as mensagens.
+ * @param {Array} historico - lista de mensagens no formato esperado pelo Gemini
+ * @returns {Promise<string>} - texto da resposta gerada pela IA
+ */
+async function consultarGemini(historico) {
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'SUA_CHAVE_API_AQUI') {
+    throw new Error('CHAVE_NAO_CONFIGURADA');
+  }
+ 
+  const corpoRequisicao = {
+    contents: historico,
+    systemInstruction: { parts: [{ text: INSTRUCAO_SISTEMA }] },
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 1024,
+    },
+  };
+ 
+  const resposta = await fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(corpoRequisicao),
+  });
+ 
+  if (!resposta.ok) {
+    const detalhe = await resposta.json().catch(() => null);
+    const erro = new Error(detalhe?.error?.message || `Erro HTTP ${resposta.status}`);
+    erro.status = resposta.status;
+    throw erro;
+  }
+ 
+  const dados = await resposta.json();
+  const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text;
+ 
+  if (!textoResposta) {
+    throw new Error('RESPOSTA_VAZIA');
+  }
+ 
+  return textoResposta;
+}
+ 
+/* --------------------------------------------------------------------------
+   5. RENDERIZAÇÃO DAS MENSAGENS NA TELA
+   -------------------------------------------------------------------------- */
+ 
+/**
+ * Cria e insere uma bolha de mensagem no histórico visual do chat.
+ * @param {'user'|'model'} autor
+ * @param {string} texto
+ */
+function renderizarMensagem(autor, texto) {
+  const linha = document.createElement('div');
+  linha.className = `msg ${autor === 'user' ? 'msg-user' : 'msg-ai'}`;
+ 
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.setAttribute('aria-hidden', 'true');
+  avatar.textContent = autor === 'user' ? 'EU' : 'IA';
+ 
+  const coluna = document.createElement('div');
+  const bolha = document.createElement('div');
+  bolha.className = 'msg-bubble';
+  bolha.innerHTML = formatarTextoResposta(texto);
+ 
+  const horario = document.createElement('span');
+  horario.className = 'msg-time';
+  horario.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+ 
+  coluna.appendChild(bolha);
+  coluna.appendChild(horario);
+  linha.appendChild(avatar);
+  linha.appendChild(coluna);
+  elMensagens.appendChild(linha);
+ 
+  rolarParaFinal();
+}
+ 
+/**
+ * Converte marcações simples de texto (negrito, blocos de código, quebras de
+ * linha) em HTML legível, sem usar nenhuma biblioteca de markdown externa.
+ * O texto é escapado primeiro para evitar injeção de HTML (XSS).
+ */
+function formatarTextoResposta(textoOriginal) {
+  let texto = escaparHtml(textoOriginal);
+ 
+  // Blocos de código / fórmulas entre crases triplas ```...```
+  texto = texto.replace(/```([\s\S]*?)```/g, (_, codigo) => `<pre><code>${codigo.trim()}</code></pre>`);
+ 
+  // Código inline entre crases simples `...`
+  texto = texto.replace(/`([^`]+)`/g, '<code>$1</code>');
+ 
+  // Negrito **texto**
+  texto = texto.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+ 
+  // Quebras de linha simples viram <br>
+  texto = texto.replace(/\n/g, '<br>');
+ 
+  return texto;
+}
+ 
+/** Escapa caracteres especiais de HTML para exibir texto de forma segura. */
+function escaparHtml(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto;
+  return div.innerHTML;
+}
+ 
+/* --------------------------------------------------------------------------
+   6. INDICADOR DE CARREGAMENTO (typing indicator)
+   -------------------------------------------------------------------------- */
+ 
+/** Insere a bolha animada de "digitando..." enquanto a IA processa a resposta. */
+function mostrarIndicadorDigitando() {
+  const id = `typing-${Date.now()}`;
+  const linha = document.createElement('div');
+  linha.className = 'msg msg-ai';
+  linha.id = id;
+  linha.innerHTML = `
+    <div class="msg-avatar" aria-hidden="true">IA</div>
+    <div class="msg-bubble" role="status" aria-label="O tutor está digitando">
+      <div class="typing-indicator"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  elMensagens.appendChild(linha);
+  rolarParaFinal();
+  return id;
+}
+ 
+/** Remove o indicador de "digitando..." assim que a resposta chega. */
+function removerIndicadorDigitando(id) {
+  document.getElementById(id)?.remove();
+}
+ 
+/* --------------------------------------------------------------------------
+   7. TRATAMENTO DE ERROS
+   -------------------------------------------------------------------------- */
+ 
+/** Traduz erros técnicos em mensagens amigáveis para o usuário final. */
+function traduzirErro(erro) {
+  if (erro.message === 'CHAVE_NAO_CONFIGURADA') {
+    return 'A chave da API do Gemini ainda não foi configurada. Defina GEMINI_API_KEY no arquivo js/ia.js para ativar o tutor.';
+  }
+  if (erro.message === 'RESPOSTA_VAZIA') {
+    return 'O tutor não conseguiu gerar uma resposta para essa pergunta. Tente reformular ou envie novamente.';
+  }
+  if (erro.status === 429) {
+    return 'Limite de uso da API atingido no momento. Aguarde alguns instantes e tente novamente.';
+  }
+  if (!navigator.onLine) {
+    return 'Você parece estar sem conexão com a internet. Verifique sua rede e tente novamente.';
+  }
+  return 'Não foi possível falar com o tutor agora. Verifique sua conexão ou tente novamente em instantes.';
+}
+ 
+/** Exibe a faixa de erro amigável acima da barra de digitação. */
+function exibirErro(mensagem) {
+  if (!elErro) return;
+  elErro.textContent = mensagem;
+  elErro.classList.add('is-visible');
+}
+ 
+/** Esconde a faixa de erro (chamado a cada novo envio de mensagem). */
+function esconderErro() {
+  elErro?.classList.remove('is-visible');
+}
+ 
+/* --------------------------------------------------------------------------
+   8. UTILITÁRIOS DE INTERFACE
+   -------------------------------------------------------------------------- */
+ 
+/** Habilita/desabilita o input e o botão de enviar durante a requisição. */
+function alternarEstadoCarregando(carregando) {
+  requisicaoEmAndamento = carregando;
+  elBotaoEnviar.disabled = carregando;
+  elInput.disabled = carregando;
+}
+ 
+/** Rola a área de mensagens até o final, garantindo que a última apareça. */
+function rolarParaFinal() {
+  elMensagens.scrollTop = elMensagens.scrollHeight;
+}
+ 
