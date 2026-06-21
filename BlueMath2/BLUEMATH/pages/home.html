@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — BlueMath</title>
+  <meta name="description" content="Acompanhe sua jornada de estudos, metas diárias e atividades recomendadas pelo Tutor IA no seu painel BlueMath.">
+  <meta property="og:title" content="Dashboard — BlueMath">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%232563eb%22/><text x=%2250%22 y=%2266%22 font-size=%2256%22 fill=%22white%22 text-anchor=%22middle%22 font-family=%22sans-serif%22>∑</text></svg>">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/perfil.css">
+</head>
+<body>
+
+  <a href="#conteudo-principal" class="sr-only">Pular para o conteúdo principal</a>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-icon" aria-hidden="true">∑</span>
+        <span>BlueMath<span class="brand-tagline">Aprenda a Pensar</span></span>
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
+        <a href="../index.html">Início</a>
+        <a href="biblioteca.html">Biblioteca</a>
+        <a href="calculadoras.html">Calculadoras</a>
+        <a href="estatisticas.html">Estatísticas</a>
+        <a href="ia.html">Tutor IA</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="perfil.html" class="btn btn-secondary btn-sm">Perfil</a>
+        <a href="home.html" class="btn btn-primary btn-sm" aria-current="page">Acessar Painel</a>
+        <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <!-- ===================== SIDEBAR INTERNA ===================== -->
+    <aside class="app-sidebar" aria-label="Navegação do painel">
+      <div class="sidebar-group">
+        <h5>Principal</h5>
+        <a class="sidebar-link" href="home.html" aria-current="page">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="sidebar-link" href="calculadoras.html">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 16 0v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 22V11"/><path d="M15 22V11"/></svg>
+          <span>Trilha Personalizada</span>
+        </a>
+        <a class="sidebar-link" href="biblioteca.html">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Biblioteca</span>
+        </a>
+        <a class="sidebar-link" href="estatisticas.html">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          <span>Meu Progresso</span>
+        </a>
+      </div>
+      <div class="sidebar-group">
+        <h5>Explorar</h5>
+        <a class="sidebar-link" href="ia.html">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 20l1-4.4a8.4 8.4 0 0 1-1-4.1 8.38 8.38 0 0 1 8.4-9h.6a8.4 8.4 0 0 1 9 8.4z"/></svg>
+          <span>SocraticAI Tutor</span>
+        </a>
+        <a class="sidebar-link" href="estatisticas.html#historico">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span>Histórico de Aulas</span>
+        </a>
+        <a class="sidebar-link" href="estatisticas.html#conquistas">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M9 14 7.5 22 12 19l4.5 3L15 14"/></svg>
+          <span>Conquistas</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ===================== CONTEÚDO PRINCIPAL ===================== -->
+    <main class="app-main" id="conteudo-principal">
+      <div class="app-topbar">
+        <div class="app-search" role="search">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" placeholder="Procurar tópicos, fórmulas ou lições..." aria-label="Procurar tópicos, fórmulas ou lições">
+        </div>
+      </div>
+
+      <section class="card fade-in-on-scroll" aria-labelledby="saudacao-titulo" style="margin-bottom: var(--space-5); background: linear-gradient(135deg, var(--color-primary-light), var(--color-bg));">
+        <span class="badge badge-blue">Perfil Explorador Visual</span>
+        <h2 id="saudacao-titulo" style="margin-top: var(--space-3);">Bom dia, estudante! 👋</h2>
+        <p>Vamos treinar seu raciocínio hoje? Sua jornada personalizada foi iniciada. Com base no seu quiz, preparamos lições focadas em geometria e lógica visual para acelerar sua compreensão.</p>
+        <p style="font-size: var(--fs-xs); font-weight:700; margin-top: var(--space-4); margin-bottom: var(--space-2);">PROGRESSO DO DIA</p>
+        <div class="progress"><div class="progress-bar" style="width:65%"></div></div>
+      </section>
+
+      <div class="grid grid-2" style="margin-bottom: var(--space-5); align-items:stretch;">
+        <article class="card fade-in-on-scroll">
+          <span class="badge badge-blue">Iniciante</span>
+          <h3 style="margin-top: var(--space-3);">Cálculo de Áreas com o Tutor IA</h3>
+          <p style="font-size: var(--fs-sm);">O tutor vai guiá-lo através da descoberta das fórmulas de área para triângulos e polígonos irregulares usando o método socrático.</p>
+          <p class="text-muted" style="font-size: var(--fs-xs); margin: var(--space-3) 0;">⏱ ~15 min · ⚡ 120 XP</p>
+          <a href="ia.html" class="btn btn-primary btn-sm">Continuar com o Tutor IA →</a>
+        </article>
+        <aside class="card fade-in-on-scroll" aria-labelledby="meta-titulo">
+          <h3 id="meta-titulo" style="font-size: var(--fs-sm);">Meta Diária</h3>
+          <p style="font-size: var(--fs-2xl); font-weight:800; color: var(--color-primary); margin: var(--space-3) 0 0;">2/3</p>
+          <p class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--space-4);">lições concluídas — você está quase lá!</p>
+          <a href="estatisticas.html" class="btn btn-secondary btn-sm btn-block">Ver todas as lições de hoje</a>
+        </aside>
+      </div>
+
+      <div class="grid grid-4" style="margin-bottom: var(--space-5);">
+        <a href="ia.html" class="card card-hover fade-in-on-scroll text-center" style="padding: var(--space-4);">
+          <p style="font-weight:700; font-size: var(--fs-sm);">SocraticAI</p>
+          <p class="text-muted" style="font-size: var(--fs-xs);">Tire suas dúvidas</p>
+        </a>
+        <a href="biblioteca.html" class="card card-hover fade-in-on-scroll text-center" style="padding: var(--space-4);">
+          <p style="font-weight:700; font-size: var(--fs-sm);">Biblioteca</p>
+          <p class="text-muted" style="font-size: var(--fs-xs);">Conteúdos e exercícios</p>
+        </a>
+        <a href="calculadoras.html" class="card card-hover fade-in-on-scroll text-center" style="padding: var(--space-4);">
+          <p style="font-weight:700; font-size: var(--fs-sm);">Trilha</p>
+          <p class="text-muted" style="font-size: var(--fs-xs);">Seu plano de estudos</p>
+        </a>
+        <a href="estatisticas.html" class="card card-hover fade-in-on-scroll text-center" style="padding: var(--space-4);">
+          <p style="font-weight:700; font-size: var(--fs-sm);">Progresso</p>
+          <p class="text-muted" style="font-size: var(--fs-xs);">Analise sua evolução</p>
+        </a>
+      </div>
+
+      <!-- ===================== RESUMO DO PERFIL (preenchido via js/perfil.js a partir do quiz) ===================== -->
+      <section id="resumo-perfil" class="card fade-in-on-scroll" aria-labelledby="resumo-titulo" style="margin-bottom: var(--space-5);">
+        <h3 id="resumo-titulo">Resumo do Perfil</h3>
+        <p class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--space-4);">Dados coletados no seu Quiz de Personalização</p>
+        <dl class="profile-summary">
+          <div class="profile-stat"><dt>Nível de Estudo</dt><dd id="resumo-nivel-estudo">Ensino Médio</dd></div>
+          <div class="profile-stat"><dt>Autoavaliação</dt><dd id="resumo-autoavaliacao">Intermediário</dd></div>
+          <div class="profile-stat"><dt>Confiança</dt><dd id="resumo-nivel-xp">Nível 12 · Bronze</dd></div>
+          <div class="profile-stat"><dt>Frequência</dt><dd>Diária (30 min)</dd></div>
+        </dl>
+        <p style="font-size: var(--fs-xs); font-weight:700; margin-top: var(--space-5);">Áreas de dificuldade</p>
+        <div class="tag-list" id="resumo-dificuldades"><span class="tag-pill">Cálculo Integral</span><span class="tag-pill">Trigonometria</span></div>
+        <p style="font-size: var(--fs-xs); font-weight:700; margin-top: var(--space-4);">Pontos fortes</p>
+        <div class="tag-list" id="resumo-confortaveis"><span class="tag-pill">Raciocínio Lógico</span><span class="tag-pill">Geometria Plana</span></div>
+        <a href="perfil.html" class="btn btn-secondary btn-sm" style="margin-top: var(--space-5);">Refazer o quiz de perfil</a>
+      </section>
+
+      <section aria-labelledby="atividades-titulo">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-4);">
+          <h3 id="atividades-titulo">Atividades Recentes</h3>
+          <a href="estatisticas.html" style="font-size: var(--fs-sm); font-weight:700; color: var(--color-primary);">Ver tudo</a>
+        </div>
+        <div class="card fade-in-on-scroll" style="padding:0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding: var(--space-4) var(--space-5); border-bottom:1px solid var(--color-border);">
+            <div><strong style="font-size: var(--fs-sm);">Introdução a Polígonos</strong><p class="text-muted" style="font-size: var(--fs-xs);">Ontem</p></div>
+            <span class="badge badge-green">Concluído +50 XP</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding: var(--space-4) var(--space-5);">
+            <div><strong style="font-size: var(--fs-sm);">Quiz de Nivelamento</strong><p class="text-muted" style="font-size: var(--fs-xs);">2 dias atrás</p></div>
+            <span class="badge badge-green">Concluído +150 XP</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="brand"><span class="brand-icon" aria-hidden="true">∑</span><span>BlueMath</span></a>
+          <p>Revolucionando o ensino de matemática através da Inteligência Artificial e da Metodologia Socrática.</p>
+        </div>
+        <div class="footer-col"><h4>Plataforma</h4><ul>
+          <li><a href="home.html">Dashboard</a></li>
+          <li><a href="biblioteca.html">Biblioteca</a></li>
+          <li><a href="calculadoras.html">Calculadoras</a></li>
+          <li><a href="ia.html">Tutor IA</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Empresa</h4><ul>
+          <li><a href="../index.html#como-funciona">Como Funciona</a></li>
+          <li><a href="../index.html#planos">Planos</a></li>
+          <li><a href="#">Carreiras</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Suporte</h4><ul>
+          <li><a href="../index.html#perguntas">Perguntas Frequentes</a></li>
+          <li><a href="estatisticas.html">Meu Progresso</a></li>
+          <li><a href="perfil.html">Minha Conta</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Legal</h4><ul>
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-ano-atual>2026</span> BlueMath Educação LTDA. Todos os direitos reservados.</p>
+        <span class="footer-status"><span class="status-dot" aria-hidden="true"></span>Tutor IA Online</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script src="../js/perfil.js"></script>
+</body>
+</html>

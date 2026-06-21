@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz de Personalização — BlueMath</title>
+  <meta name="description" content="Responda ao quiz de personalização do BlueMath e receba uma trilha de estudos de matemática feita sob medida para o seu nível e objetivos.">
+  <meta property="og:title" content="Quiz de Personalização — BlueMath">
+  <meta property="og:description" content="Em poucos minutos, descobrimos seu nível e montamos sua trilha de estudos personalizada.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%232563eb%22/><text x=%2250%22 y=%2266%22 font-size=%2256%22 fill=%22white%22 text-anchor=%22middle%22 font-family=%22sans-serif%22>∑</text></svg>">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/perfil.css">
+</head>
+<body>
+
+  <a href="#conteudo-principal" class="sr-only">Pular para o conteúdo principal</a>
+
+  <!-- ===================== NAVBAR (idêntica em todas as páginas) ===================== -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-icon" aria-hidden="true">∑</span>
+        <span>BlueMath<span class="brand-tagline">Aprenda a Pensar</span></span>
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
+        <a href="../index.html">Início</a>
+        <a href="biblioteca.html">Biblioteca</a>
+        <a href="calculadoras.html">Calculadoras</a>
+        <a href="estatisticas.html">Estatísticas</a>
+        <a href="ia.html">Tutor IA</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="perfil.html" class="btn btn-secondary btn-sm" aria-current="page">Perfil</a>
+        <a href="home.html" class="btn btn-primary btn-sm">Acessar Painel</a>
+        <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo-principal">
+    <section aria-labelledby="perfil-titulo">
+      <div class="container quiz-wrap">
+
+        <div class="text-center fade-in-on-scroll" style="margin-bottom: var(--space-8);">
+          <span class="eyebrow">Estrutura do Seu Perfil</span>
+          <h1 id="perfil-titulo" style="font-size: var(--fs-2xl); margin-top: var(--space-4);">Sua jornada começa agora.</h1>
+          <p style="max-width: 520px; margin-inline: auto;">Personalize sua jornada em poucos minutos. O tutor fará perguntas para guiá-lo — nenhuma resposta pronta, só raciocínio.</p>
+        </div>
+
+        <!-- ===================== RESUMO DO PERFIL JÁ SALVO ===================== -->
+        <!-- Preenchido via js/perfil.js (renderizarResumo) quando já existe um perfil salvo no localStorage -->
+        <section id="resumo-perfil" class="card fade-in-on-scroll" aria-labelledby="resumo-titulo" style="margin-bottom: var(--space-8);" hidden>
+          <div class="profile-header">
+            <div class="profile-avatar" aria-hidden="true">EU</div>
+            <div>
+              <h2 id="resumo-titulo" style="font-size: var(--fs-lg);">Seu perfil já está pronto</h2>
+              <p class="text-muted" style="font-size: var(--fs-sm);">Estes foram os dados coletados no seu último Quiz de Personalização. Quer atualizar algo? Refaça o quiz logo abaixo.</p>
+            </div>
+          </div>
+          <dl class="profile-summary">
+            <div class="profile-stat"><dt>Nível de Estudo</dt><dd id="resumo-nivel-estudo">—</dd></div>
+            <div class="profile-stat"><dt>Autoavaliação</dt><dd id="resumo-autoavaliacao">—</dd></div>
+            <div class="profile-stat"><dt>Confiança</dt><dd id="resumo-nivel-xp">—</dd></div>
+          </dl>
+          <p style="font-size: var(--fs-xs); font-weight:700; margin-top: var(--space-5);">Áreas de dificuldade</p>
+          <div class="tag-list" id="resumo-dificuldades"></div>
+          <p style="font-size: var(--fs-xs); font-weight:700; margin-top: var(--space-4);">Pontos fortes</p>
+          <div class="tag-list" id="resumo-confortaveis"></div>
+          <a href="home.html" class="btn btn-primary btn-sm" style="margin-top: var(--space-6);">Ir para o Dashboard →</a>
+        </section>
+
+        <!-- ===================== CABEÇALHO DE PROGRESSO DO QUIZ ===================== -->
+        <div class="quiz-progress-head fade-in-on-scroll">
+          <span id="quiz-progress-text">Passo 1 de 5</span>
+          <span>~5 min para concluir</span>
+        </div>
+        <div class="progress fade-in-on-scroll" style="margin-bottom: var(--space-6);">
+          <div class="progress-bar" id="quiz-progress-bar" style="width: 20%;"></div>
+        </div>
+
+        <!-- ===================== CARTÃO DO QUIZ (multi-etapas) ===================== -->
+        <div class="quiz-card fade-in-on-scroll" id="quiz-container" role="form" aria-label="Quiz de Personalização">
+
+          <!-- ETAPA 1 — Nível de estudo -->
+          <div class="quiz-step is-active" data-step="1">
+            <h2>Qual o seu nível de estudo atual?</h2>
+            <div class="option-list">
+              <label class="option-item">
+                <input type="radio" name="nivelEstudo" value="fundamental">
+                <span class="option-text"><span class="option-title">Ensino Fundamental</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="nivelEstudo" value="medio">
+                <span class="option-text"><span class="option-title">Ensino Médio</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="nivelEstudo" value="tecnico">
+                <span class="option-text"><span class="option-title">Curso Técnico</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="nivelEstudo" value="superior">
+                <span class="option-text"><span class="option-title">Ensino Superior</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="nivelEstudo" value="outro">
+                <span class="option-text"><span class="option-title">Outro</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+            </div>
+            <div class="quiz-nav">
+              <button type="button" class="btn btn-secondary btn-quiz-prev">← Voltar</button>
+              <button type="button" class="btn btn-primary btn-quiz-next">Próximo →</button>
+            </div>
+          </div>
+
+          <!-- ETAPA 2 — Autoavaliação -->
+          <div class="quiz-step" data-step="2">
+            <h2>Como você avalia seus conhecimentos em matemática?</h2>
+            <div class="option-list">
+              <label class="option-item">
+                <input type="radio" name="autoavaliacao" value="iniciante">
+                <span class="option-icon" aria-hidden="true">●</span>
+                <span class="option-text">
+                  <span class="option-title">Iniciante</span>
+                  <span class="option-desc">Estou começando agora ou tenho apenas noções muito básicas.</span>
+                </span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="autoavaliacao" value="basico">
+                <span class="option-icon" aria-hidden="true">●●</span>
+                <span class="option-text">
+                  <span class="option-title">Básico</span>
+                  <span class="option-desc">Conheço os conceitos essenciais, mas erro com frequência em problemas mais elaborados.</span>
+                </span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="autoavaliacao" value="intermediario">
+                <span class="option-icon" aria-hidden="true">●●●</span>
+                <span class="option-text">
+                  <span class="option-title">Intermediário</span>
+                  <span class="option-desc">Resolvo bem a maioria dos problemas do meu nível escolar.</span>
+                </span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="autoavaliacao" value="avancado">
+                <span class="option-icon" aria-hidden="true">●●●●</span>
+                <span class="option-text">
+                  <span class="option-title">Avançado</span>
+                  <span class="option-desc">Domino conceitos avançados e busco desafios maiores.</span>
+                </span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+            </div>
+            <p class="quiz-hint">💡 Não se preocupe em acertar — você poderá ajustar isso quando quiser, conforme sua evolução.</p>
+            <div class="quiz-nav">
+              <button type="button" class="btn btn-secondary btn-quiz-prev">← Voltar</button>
+              <button type="button" class="btn btn-primary btn-quiz-next">Próximo →</button>
+            </div>
+          </div>
+
+          <!-- ETAPA 3 — Dificuldades -->
+          <div class="quiz-step" data-step="3">
+            <h2>Em quais assuntos você tem mais dificuldades?</h2>
+            <p class="text-muted" style="font-size: var(--fs-sm); margin-top: -1rem; margin-bottom: var(--space-5);">Selecione todas as opções que se aplicam a você — isso nos ajuda a ajustar sua trilha de estudos.</p>
+            <div class="option-list" id="lista-dificuldades">
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="fracoes"><span class="option-icon" aria-hidden="true">½</span><span class="option-text"><span class="option-title">Frações</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="equacoes"><span class="option-icon" aria-hidden="true">x</span><span class="option-text"><span class="option-title">Equações</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="geometria"><span class="option-icon" aria-hidden="true">△</span><span class="option-text"><span class="option-title">Geometria</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="funcoes"><span class="option-icon" aria-hidden="true">ƒ</span><span class="option-text"><span class="option-title">Funções</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="porcentagens"><span class="option-icon" aria-hidden="true">%</span><span class="option-text"><span class="option-title">Porcentagens</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="estatistica"><span class="option-icon" aria-hidden="true">σ</span><span class="option-text"><span class="option-title">Estatística</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="trigonometria"><span class="option-icon" aria-hidden="true">∠</span><span class="option-text"><span class="option-title">Trigonometria</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="dificuldades" value="matematica-financeira"><span class="option-icon" aria-hidden="true">R$</span><span class="option-text"><span class="option-title">Matemática Financeira</span></span><span class="option-check" aria-hidden="true"></span></label>
+            </div>
+            <div class="quiz-nav">
+              <button type="button" class="btn btn-secondary btn-quiz-prev">← Voltar</button>
+              <button type="button" class="btn btn-primary btn-quiz-next">Próximo →</button>
+            </div>
+          </div>
+
+          <!-- ETAPA 4 — Pontos fortes -->
+          <div class="quiz-step" data-step="4">
+            <h2>Com quais assuntos você se sente mais confortável?</h2>
+            <p class="text-muted" style="font-size: var(--fs-sm); margin-top: -1rem; margin-bottom: var(--space-5);">Selecione todas as opções em que você se sente seguro — isso também entra no seu plano de estudos.</p>
+            <div class="option-list" id="lista-confortaveis">
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="fracoes"><span class="option-icon" aria-hidden="true">½</span><span class="option-text"><span class="option-title">Frações</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="equacoes"><span class="option-icon" aria-hidden="true">x</span><span class="option-text"><span class="option-title">Equações</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="geometria"><span class="option-icon" aria-hidden="true">△</span><span class="option-text"><span class="option-title">Geometria</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="funcoes"><span class="option-icon" aria-hidden="true">ƒ</span><span class="option-text"><span class="option-title">Funções</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="porcentagens"><span class="option-icon" aria-hidden="true">%</span><span class="option-text"><span class="option-title">Porcentagens</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="estatistica"><span class="option-icon" aria-hidden="true">σ</span><span class="option-text"><span class="option-title">Estatística</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="trigonometria"><span class="option-icon" aria-hidden="true">∠</span><span class="option-text"><span class="option-title">Trigonometria</span></span><span class="option-check" aria-hidden="true"></span></label>
+              <label class="option-item"><input type="checkbox" name="confortaveis" value="matematica-financeira"><span class="option-icon" aria-hidden="true">R$</span><span class="option-text"><span class="option-title">Matemática Financeira</span></span><span class="option-check" aria-hidden="true"></span></label>
+            </div>
+            <div class="quiz-nav">
+              <button type="button" class="btn btn-secondary btn-quiz-prev">← Voltar</button>
+              <button type="button" class="btn btn-primary btn-quiz-next">Próximo →</button>
+            </div>
+          </div>
+
+          <!-- ETAPA 5 — Estilo de aprendizado -->
+          <div class="quiz-step" data-step="5">
+            <h2>Ao aprender algo novo, o que mais te ajuda?</h2>
+            <div class="option-list">
+              <label class="option-item">
+                <input type="radio" name="estiloAprendizado" value="passo-a-passo">
+                <span class="option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </span>
+                <span class="option-text"><span class="option-title">Explicações passo a passo</span><span class="option-desc">Gosto de entender cada etapa do raciocínio até chegar à resposta.</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="estiloAprendizado" value="visual">
+                <span class="option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                </span>
+                <span class="option-text"><span class="option-title">Exemplos visuais e diagramas</span><span class="option-desc">Aprendo melhor enxergando gráficos, figuras e representações visuais.</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="estiloAprendizado" value="sozinho">
+                <span class="option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </span>
+                <span class="option-text"><span class="option-title">Resolver exercícios sozinho</span><span class="option-desc">Prefiro tentar primeiro e receber dicas apenas quando travar.</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="estiloAprendizado" value="aplicacoes">
+                <span class="option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </span>
+                <span class="option-text"><span class="option-title">Exemplos da vida real e aplicações</span><span class="option-desc">Entendo melhor quando vejo a matemática aplicada a situações reais.</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+              <label class="option-item">
+                <input type="radio" name="estiloAprendizado" value="video">
+                <span class="option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                </span>
+                <span class="option-text"><span class="option-title">Explicações em vídeo</span><span class="option-desc">Prefiro acompanhar uma explicação narrada, no meu próprio ritmo.</span></span>
+                <span class="option-check" aria-hidden="true"></span>
+              </label>
+            </div>
+            <p class="quiz-hint">Essa é a última pergunta — ao concluir, seu perfil de aprendizagem estará pronto.</p>
+            <div class="quiz-nav">
+              <button type="button" class="btn btn-secondary btn-quiz-prev">← Voltar</button>
+              <button type="button" class="btn btn-primary" id="btn-finalizar-quiz">Concluir Quiz →</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ===================== TELA DE SUCESSO (exibida via JS ao concluir o quiz) ===================== -->
+        <div class="quiz-card" id="quiz-sucesso">
+          <div class="quiz-success">
+            <div class="check-circle" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h2>Perfil completo garantido! 🎉</h2>
+            <p style="max-width: 440px; margin: var(--space-3) auto var(--space-6);">Ao terminar, você recebeu um perfil de aprendizagem personalizado que guiará cada passo da sua evolução. Sua trilha já está pronta no Dashboard.</p>
+            <div style="display:flex; gap: var(--space-3); justify-content:center; flex-wrap:wrap;">
+              <a href="home.html" class="btn btn-primary">Ir para o Dashboard →</a>
+              <a href="ia.html" class="btn btn-secondary">Falar com o Tutor IA</a>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-center text-muted fade-in-on-scroll" style="font-size: var(--fs-xs); margin-top: var(--space-6);">
+          Quiz rápido · Perfil personalizado · Socratic AI · Seus dados ficam salvos apenas no seu navegador
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER (idêntico em todas as páginas) ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="brand"><span class="brand-icon" aria-hidden="true">∑</span><span>BlueMath</span></a>
+          <p>Revolucionando o ensino de matemática através da Inteligência Artificial e da Metodologia Socrática.</p>
+        </div>
+        <div class="footer-col"><h4>Plataforma</h4><ul>
+          <li><a href="home.html">Dashboard</a></li>
+          <li><a href="biblioteca.html">Biblioteca</a></li>
+          <li><a href="calculadoras.html">Calculadoras</a></li>
+          <li><a href="ia.html">Tutor IA</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Empresa</h4><ul>
+          <li><a href="../index.html#como-funciona">Como Funciona</a></li>
+          <li><a href="../index.html#planos">Planos</a></li>
+          <li><a href="#">Carreiras</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Suporte</h4><ul>
+          <li><a href="../index.html#perguntas">Perguntas Frequentes</a></li>
+          <li><a href="estatisticas.html">Meu Progresso</a></li>
+          <li><a href="perfil.html">Minha Conta</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Legal</h4><ul>
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-ano-atual>2026</span> BlueMath Educação LTDA. Todos os direitos reservados.</p>
+        <span class="footer-status"><span class="status-dot" aria-hidden="true"></span>Tutor IA Online</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script src="../js/perfil.js"></script>
+</body>
+</html>
