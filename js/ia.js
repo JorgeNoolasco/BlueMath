@@ -17,3 +17,6 @@ async function enviarMensagem(mensagem) {
 
     return data.response;
 }
+// Exemplo de uso quando o usuário envia a mensagem
+const respostaDaIA = await enviarParaIA(textoDoUsuario);
+adicionarMensagemNaTela(respostaDaIA, "ai");
