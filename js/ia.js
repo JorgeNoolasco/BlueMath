@@ -1,18 +1,42 @@
-/*Descrição: Implementa o chat inteligente de matemática integrado à API
+/**
+ * ============================================================================
+ * BLUEMATH — TUTOR DE IA (SocraticAI)
+ * Arquivo: js/ia.js
+ * Descrição: Implementa o chat inteligente de matemática integrado à API
  * oficial do Google Gemini, usando requisições HTTP nativas (fetch),
  * 100% client-side, sem frameworks ou bibliotecas externas.
  *
  * IMPORTANTE (segurança):
- * Este projeto é exclusivamente de testes/desenvolvimento local.A chave de API NUNCA deve ficar exposta no
- * código do navegador. */
+ * Este projeto é exclusivamente de testes/desenvolvimento local. Em um
+ * ambiente de produção real, a chave de API NUNCA deve ficar exposta no
+ * código do navegador — o ideal é um backend (proxy) que guarde a chave
+ * em variável de ambiente e repasse as requisições ao Gemini.
+ * ============================================================================
+ */
 
-/* CONFIGURAÇÃO DA API */
+/* --------------------------------------------------------------------------
+   1. CONFIGURAÇÃO DA API
+   -------------------------------------------------------------------------- */
 
-const GEMINI_API_KEY = 'AQ.Ab8RN6K70A6oYFfcLUA9kK31aEg-1arx1bg5wSwVNP76LcKdzw';
-const GEMINI_MODEL = 'gemini-2.0-flash'; // Você pode usar o 2.0 ou o 1.5/3.5 aqui
+const GEMINI_API_KEY = 'AQ.Ab8RN6K1xB0cgb5fywK819PemrTYytAT4VAABx1mSgKVvcK0Cg'; // <- Substitua pela sua chave real
+const GEMINI_MODEL = 'gemini-2.0-flash'; 
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
+// Instrução de sistema: define a personalidade do tutor (método socrático)
+const INSTRUCAO_SISTEMA = `Você é o SocraticAI, o tutor de matemática da plataforma BlueMath.
+Sua missão é ajudar o estudante a PENSAR, nunca apenas entregar a resposta pronta.
+Sempre que possível, faça perguntas guiadas, dê dicas passo a passo e só revele a
+solução completa se o aluno pedir explicitamente. Use linguagem clara, encorajadora
+e adequada ao nível do estudante. Quando escrever fórmulas ou cálculos, organize-os
+em linhas separadas para facilitar a leitura. Respostas em português do Brasil.`;
+
+/**
+ * Função opcional para testar a API isoladamente no console.
+ * Só executa se a chave tiver sido alterada.
+ */
 async function testarApiDireta() {
+  if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('SUA_')) return;
+
   const data = {
     contents: [{ parts: [{ text: "Explain how AI works in a few words" }] }]
   };
@@ -25,21 +49,14 @@ async function testarApiDireta() {
     });
 
     const json = await response.json();
-    // No REST, você precisa navegar por todo o JSON para achar o texto:
-    console.log(json.candidates[0].content.parts[0].text);
+    console.log("Teste API Direta:", json.candidates[0].content.parts[0].text);
   } catch (error) {
-    console.error("Erro na requisição:", error);
+    console.error("Erro na requisição de teste:", error);
   }
 }
 
+// Executa o teste automático (útil para desenvolvimento)
 testarApiDireta();
-// Instrução de sistema: define a personalidade do tutor (método socrático)
-const INSTRUCAO_SISTEMA = `Você é o SocraticAI, o tutor de matemática da plataforma BlueMath.
-Sua missão é ajudar o estudante a PENSAR, nunca apenas entregar a resposta pronta.
-Sempre que possível, faça perguntas guiadas, dê dicas passo a passo e só revele a
-solução completa se o aluno pedir explicitamente. Use linguagem clara, encorajadora
-e adequada ao nível do estudante. Quando escrever fórmulas ou cálculos, organize-os
-em linhas separadas para facilitar a leitura. Respostas em português do Brasil.`;
 
 /* --------------------------------------------------------------------------
    2. ESTADO DO CHAT (histórico mantido durante a sessão do usuário)
@@ -60,15 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
   elErro = document.getElementById('chat-error');
   elSugestoes = document.querySelectorAll('.suggestion-chip');
 
-  if (!elFormulario) return; // Só inicializa o chat na página pages/ia.html
+  if (!elFormulario) return; // Só inicializa o chat se o formulário existir na página
 
   inicializarChat();
 });
 
 /**
- * Liga todos os eventos da interface de chat: envio do formulário, atalho de
- * teclado (Enter para enviar / Shift+Enter para quebrar linha), chips de
- * sugestão e auto-resize da caixa de texto.
+ * Liga todos os eventos da interface de chat
  */
 function inicializarChat() {
   elFormulario.addEventListener('submit', (evento) => {
@@ -79,7 +94,7 @@ function inicializarChat() {
   elInput.addEventListener('keydown', (evento) => {
     if (evento.key === 'Enter' && !evento.shiftKey) {
       evento.preventDefault();
-      enviarMensagemUsuario(elInput.value);
+      elFormulario.dispatchEvent(new Event('submit'));
     }
   });
 
@@ -100,8 +115,7 @@ function inicializarChat() {
    -------------------------------------------------------------------------- */
 
 /**
- * Processa o envio de uma nova mensagem do usuário: valida o texto, exibe na
- * tela, atualiza o histórico e dispara a chamada à API do Gemini.
+ * Processa o envio de uma nova mensagem do usuário
  */
 async function enviarMensagemUsuario(textoBruto) {
   const texto = textoBruto.trim();
@@ -132,13 +146,10 @@ async function enviarMensagemUsuario(textoBruto) {
 }
 
 /**
- * Realiza a requisição HTTP (fetch) para a API do Google Gemini, enviando
- * todo o histórico da conversa para manter o contexto entre as mensagens.
- * @param {Array} historico - lista de mensagens no formato esperado pelo Gemini
- * @returns {Promise<string>} - texto da resposta gerada pela IA
+ * Realiza a requisição HTTP (fetch) para a API do Google Gemini
  */
 async function consultarGemini(historico) {
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'SUA_CHAVE_API_AQUI') {
+  if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('SUA_')) {
     throw new Error('CHAVE_NAO_CONFIGURADA');
   }
 
@@ -180,8 +191,6 @@ async function consultarGemini(historico) {
 
 /**
  * Cria e insere uma bolha de mensagem no histórico visual do chat.
- * @param {'user'|'model'} autor
- * @param {string} texto
  */
 function renderizarMensagem(autor, texto) {
   const linha = document.createElement('div');
@@ -198,6 +207,7 @@ function renderizarMensagem(autor, texto) {
   bolha.innerHTML = formatarTextoResposta(texto);
 
   const horario = document.createElement('span');
+  counter = 0;
   horario.className = 'msg-time';
   horario.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
@@ -211,9 +221,7 @@ function renderizarMensagem(autor, texto) {
 }
 
 /**
- * Converte marcações simples de texto (negrito, blocos de código, quebras de
- * linha) em HTML legível, sem usar nenhuma biblioteca de markdown externa.
- * O texto é escapado primeiro para evitar injeção de HTML (XSS).
+ * Converte marcações simples de markdown em HTML seguro.
  */
 function formatarTextoResposta(textoOriginal) {
   let texto = escaparHtml(textoOriginal);
@@ -237,6 +245,7 @@ function formatarTextoResposta(textoOriginal) {
 function escaparHtml(texto) {
   const div = document.createElement('div');
   div.textContent = texto;
+  div.innerHTML = div.innerHTML.trim();
   return div.innerHTML;
 }
 
@@ -244,7 +253,7 @@ function escaparHtml(texto) {
    6. INDICADOR DE CARREGAMENTO (typing indicator)
    -------------------------------------------------------------------------- */
 
-/** Insere a bolha animada de "digitando..." enquanto a IA processa a resposta. */
+/** Insere a bolha animada de "digitando..." */
 function mostrarIndicadorDigitando() {
   const id = `typing-${Date.now()}`;
   const linha = document.createElement('div');
@@ -261,7 +270,7 @@ function mostrarIndicadorDigitando() {
   return id;
 }
 
-/** Remove o indicador de "digitando..." assim que a resposta chega. */
+/** Remove o indicador de "digitando..." */
 function removerIndicadorDigitando(id) {
   document.getElementById(id)?.remove();
 }
@@ -294,7 +303,7 @@ function exibirErro(mensagem) {
   elErro.classList.add('is-visible');
 }
 
-/** Esconde a faixa de erro (chamado a cada novo envio de mensagem). */
+/** Esconde a faixa de erro */
 function esconderErro() {
   elErro?.classList.remove('is-visible');
 }
@@ -305,12 +314,14 @@ function esconderErro() {
 
 /** Habilita/desabilita o input e o botão de enviar durante a requisição. */
 function alternarEstadoCarregando(carregando) {
-  requisicaoEmAndamento = carregando;
-  elBotaoEnviar.disabled = carregando;
-  elInput.disabled = carregando;
+  requisicaoEmAndamento = cargando = carregando;
+  if (elBotaoEnviar) elBotaoEnviar.disabled = carregando;
+  if (elInput) elInput.disabled = carregando;
 }
 
-/** Rola a área de mensagens até o final, garantindo que a última apareça. */
+/** Rola a área de mensagens até o final */
 function rolarParaFinal() {
-  elMensagens.scrollTop = elMensagens.scrollHeight;
+  if (elMensagens) {
+    elMensagens.scrollTop = elMensagens.scrollHeight;
+  }
 }
