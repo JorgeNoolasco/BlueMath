@@ -1,24 +1,14 @@
-/**
- * ============================================================================
- * BLUEMATH — TUTOR DE IA (SocraticAI)
- * Arquivo: js/ia.js
- * Descrição: Implementa o chat inteligente de matemática integrado à API
+/*Descrição: Implementa o chat inteligente de matemática integrado à API
  * oficial do Google Gemini, usando requisições HTTP nativas (fetch),
  * 100% client-side, sem frameworks ou bibliotecas externas.
  *
  * IMPORTANTE (segurança):
- * Este projeto é exclusivamente de testes/desenvolvimento local. Em um
- * ambiente de produção real, a chave de API NUNCA deve ficar exposta no
- * código do navegador — o ideal é um backend (proxy) que guarde a chave
- * em variável de ambiente e repasse as requisições ao Gemini.
- * ============================================================================
- */
+ * Este projeto é exclusivamente de testes/desenvolvimento local.A chave de API NUNCA deve ficar exposta no
+ * código do navegador. */
 
-/* --------------------------------------------------------------------------
-   1. CONFIGURAÇÃO DA API
-   -------------------------------------------------------------------------- */
+/* CONFIGURAÇÃO DA API */
 
-const GEMINI_API_KEY = 'SUA_NOVA_CHAVE_AQUI';
+const GEMINI_API_KEY = 'AQ.Ab8RN6K70A6oYFfcLUA9kK31aEg-1arx1bg5wSwVNP76LcKdzw';
 const GEMINI_MODEL = 'gemini-2.0-flash'; // Você pode usar o 2.0 ou o 1.5/3.5 aqui
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
