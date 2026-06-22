@@ -18,7 +18,7 @@
    1. CONFIGURAÇÃO DA API
    -------------------------------------------------------------------------- */
 
-const GEMINI_API_KEY = 'AQ.Ab8RN6K6Tpqfo7LDCFLEy5uiLpDgcdpI6mkaKCjjNl__SfAaLA'; // <- Substitua pela sua chave real
+const GEMINI_API_KEY = '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'; // <- Substitua pela sua chave real
 const GEMINI_MODEL = 'gemini-2.0-flash'; 
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
