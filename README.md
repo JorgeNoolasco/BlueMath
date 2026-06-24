@@ -19,7 +19,7 @@ BLUEMATH/
 ├── js/
 │   ├── script.js              # Comportamentos globais (menu mobile, fade-in, FAQ, rodapé)
 │   ├── perfil.js               # Lógica do quiz multi-etapas + localStorage
-│   └── ia.js                   # Integração com a API do Google Gemini (chat)
+│   └── ia.js                   # Integração com a API (chat)
 └── pages/
     ├── home.html              # Dashboard do estudante (logado)
     ├── biblioteca.html        # Biblioteca de módulos de estudo
@@ -111,7 +111,6 @@ Implementadas só com `@keyframes` e `transition` — fade-in ao rolar a página
 - **HTML5** semântico
 - **CSS3** puro (Custom Properties, Grid, Flexbox, `@keyframes`)
 - **JavaScript (Vanilla ES6+)** — módulos funcionais, `fetch`, `IntersectionObserver`, `localStorage`
-- **Google Gemini API** (`gemini-2.0-flash`) via requisição HTTP nativa
 
 Nenhuma dependência externa de build, framework ou biblioteca de UI foi utilizada.
 
