@@ -1,12 +1,12 @@
-# 🔷 BlueMath — Aprenda a Pensar
+#  BlueMath — Aprenda a Pensar
 
-Plataforma web de ensino de matemática que combina **metodologia socrática** com um **tutor de Inteligência Artificial** (Google Gemini). Em vez de entregar respostas prontas, o BlueMath guia o estudante com perguntas e dicas até que ele mesmo construa o raciocínio.
+Plataforma web de ensino de matemática que combina **metodologia socrática** com um **tutor de Inteligência Artificial** (). Em vez de entregar respostas prontas, o BlueMath guia o estudante com perguntas e dicas até que ele mesmo construa o raciocínio.
 
 > Projeto 100% **Vanilla** — sem Node.js, sem frameworks JS, sem bibliotecas de CSS. Apenas HTML5, CSS3 e JavaScript puro.
 
 ---
 
-## 📁 Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 BLUEMATH/
@@ -31,7 +31,7 @@ BLUEMATH/
 
 ---
 
-## 🚀 Como rodar o projeto localmente
+##  Como rodar o projeto localmente
 
 Como não há build/bundler, basta servir os arquivos estáticos. Duas opções simples:
 
@@ -47,23 +47,20 @@ Depois acesse `http://localhost:8000` no navegador.
 
 ---
 
-## 🤖 Configurando o Tutor IA (Google Gemini)
+##  Configurando o Tutor IA (open router)
+Configurando o Tutor IA (OpenRouter)
+O chat em pages/ia.html consome a API do OpenRouter
 
-O chat em `pages/ia.html` consome a API oficial do Gemini diretamente do navegador (`fetch`), sem backend.
+Crie uma conta e gere uma chave de API em https://openrouter.ai/keys.
 
-1. Gere uma chave gratuita em **https://aistudio.google.com/apikey**.
-2. Abra `js/ia.js` e localize a constante no topo do arquivo:
-   ```js
-   const GEMINI_API_KEY = 'SUA_CHAVE_API_AQUI';
-   ```
-3. Substitua pelo valor da sua chave pessoal e salve o arquivo.
-4. Abra `pages/ia.html` e converse com o SocraticAI.
 
-> ⚠️ **Atenção de segurança:** este projeto é exclusivamente de testes/desenvolvimento local, por isso a chave fica exposta no código client-side. **Nunca faça isso em produção** — em um ambiente real, a chave deve ficar em um backend/proxy, fora do alcance do navegador.
+>  **Atenção de segurança:** este projeto é exclusivamente de testes/desenvolvimento local
+>  **Nunca faça isso em produção** —
+> em um ambiente real, a chave deve ficar em um backend/proxy, fora do alcance do navegador.
 
 ---
 
-## 🎨 Design System
+## Design System
 
 Toda a identidade visual está centralizada em variáveis CSS (`:root`) no topo de `css/style.css`:
 
@@ -85,7 +82,7 @@ Implementadas só com `@keyframes` e `transition` — fade-in ao rolar a página
 
 ---
 
-## ♿ Acessibilidade & SEO
+##  Acessibilidade & SEO
 
 - Tags semânticas (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`).
 - `aria-label`, `aria-current`, `aria-expanded`, `aria-live` em elementos interativos e no chat.
@@ -95,7 +92,7 @@ Implementadas só com `@keyframes` e `transition` — fade-in ao rolar a página
 
 ---
 
-## 🧩 Funcionalidades por página
+##  Funcionalidades por página
 
 | Página | Funcionalidade |
 |---|---|
@@ -109,7 +106,7 @@ Implementadas só com `@keyframes` e `transition` — fade-in ao rolar a página
 
 ---
 
-## 🛠️ Tecnologias
+##  Tecnologias
 
 - **HTML5** semântico
 - **CSS3** puro (Custom Properties, Grid, Flexbox, `@keyframes`)
@@ -120,6 +117,6 @@ Nenhuma dependência externa de build, framework ou biblioteca de UI foi utiliza
 
 ---
 
-## 📌 Notas finais
+##  Notas finais
 
 Todos os textos do código (`js/*.js`) estão comentados em português para facilitar manutenção e estudo do projeto. Sinta-se à vontade para trocar os dados estáticos de exemplo (XP, progresso, histórico) por dados reais assim que houver um backend/banco de dados conectado.
