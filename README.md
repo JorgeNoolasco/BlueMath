@@ -1,121 +1,161 @@
-#  BlueMath — Aprenda a Pensar
+# BlueMath — Aprenda a Pensar
 
-Plataforma web de ensino de matemática que combina **metodologia socrática** com um **tutor de Inteligência Artificial** (). Em vez de entregar respostas prontas, o BlueMath guia o estudante com perguntas e dicas até que ele mesmo construa o raciocínio.
+Plataforma web educacional voltada ao aprendizado de matemática, desenvolvida com **HTML, CSS e JavaScript puro**.
 
-> Projeto 100% **Vanilla** — sem Node.js, sem frameworks JS, sem bibliotecas de CSS. Apenas HTML5, CSS3 e JavaScript puro.
+O projeto combina uma interface de estudos, quiz de personalização, dashboard e integração com um tutor de IA através de uma API backend.
 
----
+## Sobre o projeto
 
-##  Estrutura do Projeto
+O BlueMath foi criado para praticar desenvolvimento frontend sem frameworks, organização de interfaces maiores e integração com serviços externos através de uma API.
 
+A proposta é oferecer uma experiência de estudo organizada, com recursos como biblioteca de conteúdos, acompanhamento de progresso e um tutor virtual.
+
+> Projeto desenvolvido sem frameworks JavaScript ou bibliotecas de UI.
+
+## Tecnologias utilizadas
+
+- HTML5
+- CSS3
+- JavaScript ES6+
+- Fetch API
+- LocalStorage
+- IntersectionObserver
+- API backend para o tutor de IA
+
+## Funcionalidades
+
+- Landing page
+- Quiz de personalização
+- Dashboard do estudante
+- Biblioteca de conteúdos
+- Calculadoras
+- Página de estatísticas
+- Histórico visual de progresso
+- Interface de chat
+- Integração com tutor de IA
+- Menu responsivo
+- FAQ interativo
+- Animações e microinterações
+
+## Arquitetura
+
+```text
+Navegador
+   |
+   +--> HTML
+   +--> CSS
+   +--> JavaScript
+            |
+            | fetch()
+            v
+       Backend API
+            |
+            v
+       Serviço de IA
 ```
-BLUEMATH/
-├── index.html              # Landing page (apresentação, planos, FAQ)
-├── README.md                # Este arquivo
+
+O frontend envia as mensagens para um backend hospedado separadamente. Dessa forma, credenciais do serviço de IA não precisam ficar expostas diretamente no código do navegador.
+
+## Estrutura do projeto
+
+```text
+BlueMath/
+├── index.html
+├── README.md
 ├── css/
-│   ├── style.css             # Design System global (tokens, navbar, footer, cards, grid, app-shell...)
-│   ├── perfil.css            # Estilos do quiz de personalização e resumo de perfil
-│   └── ia.css                # Estilos da interface de chat do Tutor IA
+│   ├── style.css
+│   ├── perfil.css
+│   └── ia.css
 ├── js/
-│   ├── script.js              # Comportamentos globais (menu mobile, fade-in, FAQ, rodapé)
-│   ├── perfil.js               # Lógica do quiz multi-etapas + localStorage
-│   └── ia.js                   # Integração com a API (chat)
+│   ├── script.js
+│   ├── perfil.js
+│   └── ia.js
 └── pages/
-    ├── home.html              # Dashboard do estudante (logado)
-    ├── biblioteca.html        # Biblioteca de módulos de estudo
-    ├── calculadoras.html      # Calculadoras e ferramentas matemáticas
-    ├── estatisticas.html      # Progresso, histórico de aulas e conquistas
-    ├── ia.html                # Chat com o SocraticAI Tutor
-    └── perfil.html             # Quiz de personalização + resumo de perfil
+    ├── home.html
+    ├── biblioteca.html
+    ├── calculadoras.html
+    ├── estatisticas.html
+    ├── ia.html
+    └── perfil.html
 ```
 
----
+## Design e responsividade
 
-##  Como rodar o projeto localmente
+A identidade visual utiliza variáveis CSS para centralizar cores, espaçamentos, bordas, sombras e tipografia.
 
-Como não há build/bundler, basta servir os arquivos estáticos. Duas opções simples:
+O layout possui adaptações para:
 
-**Opção 1 — Abrir direto no navegador**
-Dê duplo clique em `index.html`. (Funciona para a maior parte do site; alguns navegadores restringem `fetch` em arquivos `file://`, então a opção 2 é recomendada para testar o Tutor IA.)
+- Desktop
+- Tablet
+- Mobile
 
-**Opção 2 — Servidor local simples (recomendado)**
+Também são utilizados Grid, Flexbox, media queries, transições e animações CSS.
+
+## Acessibilidade
+
+O projeto utiliza práticas como:
+
+- HTML semântico
+- `aria-label`
+- `aria-current`
+- `aria-expanded`
+- `aria-live`
+- Navegação por teclado
+- `:focus-visible`
+- Link para pular diretamente ao conteúdo
+- Suporte a `prefers-reduced-motion`
+
+## Como executar
+
+Como o projeto não possui etapa de build, basta iniciar um servidor HTTP local.
+
+Com Python 3:
+
 ```bash
-# Com Python 3 já instalado (não requer Node/npm)
-python3 -m http.server 8000
+python -m http.server 8000
 ```
-Depois acesse `http://localhost:8000` no navegador.
 
----
+Depois acesse:
 
-##  Configurando o Tutor IA (open router)
-Configurando o Tutor IA (OpenRouter)
-O chat em pages/ia.html consome a API do OpenRouter
+```text
+http://localhost:8000
+```
 
-Crie uma conta e gere uma chave de API em https://openrouter.ai/keys.
+O servidor local é recomendado porque algumas funcionalidades utilizam `fetch()`.
 
+## Integração com o tutor de IA
 
->  **Atenção de segurança:** este projeto é exclusivamente de testes/desenvolvimento local
->  **Nunca faça isso em produção** —
-> em um ambiente real, a chave deve ficar em um backend/proxy, fora do alcance do navegador.
+O arquivo `js/ia.js` envia as mensagens para uma API backend:
 
----
+```text
+Frontend -> Backend API -> Serviço de IA
+```
 
-## Design System
+A responsabilidade por credenciais privadas deve permanecer no backend, nunca no JavaScript entregue ao navegador.
 
-Toda a identidade visual está centralizada em variáveis CSS (`:root`) no topo de `css/style.css`:
+## Aprendizados
 
-- **Cores** — paleta "azul matemático" (`--color-primary` `#2563eb`) + cinzas modernos para texto e fundos.
-- **Tipografia** — fonte `Inter`, escala de tamanhos de `--fs-xs` a `--fs-3xl`.
-- **Espaçamento** — escala `--space-1` a `--space-12`.
-- **Bordas e sombras** — `--radius-sm/md/lg/full` e `--shadow-sm/md/lg`.
+Durante o desenvolvimento, foram praticados conceitos como:
 
-Componentes reutilizáveis (botões, cards, badges, barra de progresso, navbar, footer, sidebar do painel) seguem esse mesmo sistema de tokens, garantindo consistência visual em todas as páginas.
+- Estruturação semântica com HTML
+- Design responsivo
+- Organização de CSS
+- Manipulação do DOM
+- Eventos em JavaScript
+- LocalStorage
+- Consumo de APIs
+- Comunicação assíncrona com `fetch()`
+- Acessibilidade
+- Organização de múltiplas páginas
 
-### Responsividade
-Três breakpoints, usando apenas Media Queries (sem libs):
-- **Desktop**: ≥ 1024px
-- **Tablet**: 768px – 1023px (sidebar colapsa para ícones, menu vira hambúrguer)
-- **Mobile**: < 768px (menu hambúrguer completo, grids em coluna única)
+## Próximas melhorias
 
-### Animações
-Implementadas só com `@keyframes` e `transition` — fade-in ao rolar a página (via `IntersectionObserver`), microinterações em botões/cards, indicador de "digitando" no chat, barra de progresso animada, `shake` em validação de formulário. Tudo respeita `prefers-reduced-motion`.
+- Melhorar o tratamento e sanitização de conteúdo exibido no chat
+- Adicionar testes
+- Documentar o backend do tutor
+- Persistir dados do usuário em banco de dados
+- Adicionar screenshots e demonstração visual do projeto
 
----
+## Aviso
 
-##  Acessibilidade & SEO
-
-- Tags semânticas (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`).
-- `aria-label`, `aria-current`, `aria-expanded`, `aria-live` em elementos interativos e no chat.
-- Foco visível via `:focus-visible` e navegação 100% por teclado (incluindo fechar o menu mobile com `Esc`).
-- Link "Pular para o conteúdo principal" em todas as páginas.
-- `<title>` e `<meta name="description">` únicos por página, além de tags Open Graph básicas.
-
----
-
-##  Funcionalidades por página
-
-| Página | Funcionalidade |
-|---|---|
-| `index.html` | Landing page, planos, FAQ em accordion |
-| `pages/perfil.html` | Quiz de personalização em 5 etapas (wizard), barra de progresso, validação, salvamento em `localStorage` |
-| `pages/home.html` | Dashboard com resumo do perfil, atividades recentes e metas diárias |
-| `pages/biblioteca.html` | Catálogo de módulos de estudo com progresso por assunto |
-| `pages/calculadoras.html` | Ferramentas de cálculo rápidas |
-| `pages/estatisticas.html` | XP, sequência de estudos, gráfico semanal (CSS puro), histórico e conquistas |
-| `pages/ia.html` | Chat com o SocraticAI Tutor (Google Gemini API), histórico de mensagens, indicador de digitação e tratamento de erros |
-
----
-
-##  Tecnologias
-
-- **HTML5** semântico
-- **CSS3** puro (Custom Properties, Grid, Flexbox, `@keyframes`)
-- **JavaScript (Vanilla ES6+)** — módulos funcionais, `fetch`, `IntersectionObserver`, `localStorage`
-
-Nenhuma dependência externa de build, framework ou biblioteca de UI foi utilizada.
-
----
-
-##  Notas finais
-
-Todos os textos do código (`js/*.js`) estão comentados em português para facilitar manutenção e estudo do projeto. Sinta-se à vontade para trocar os dados estáticos de exemplo (XP, progresso, histórico) por dados reais assim que houver um backend/banco de dados conectado.
+Projeto educacional desenvolvido durante meus estudos de Desenvolvimento de Sistemas.
